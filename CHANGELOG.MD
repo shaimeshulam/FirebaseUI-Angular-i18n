@@ -1,4 +1,16 @@
 # Changelog
+## 5.1.2
+* Add support for Auth Emulator [#142](https://github.com/RaphaelJenni/FirebaseUI-Angular/issues/142)
+
+## 5.1.1
+* Add support for Angular 11
+
+## 5.1.0
+* Add support for firebase@^8.0.0
+
+## 5.0.1
+* Add support for uiShow Callback [#133](https://github.com/RaphaelJenni/FirebaseUI-Angular/issues/133)
+
 ## 5.0.0
 * Upgrade library to support @angular/fire@6.0.0 [#121](https://github.com/RaphaelJenni/FirebaseUI-Angular/issues/121)
 
