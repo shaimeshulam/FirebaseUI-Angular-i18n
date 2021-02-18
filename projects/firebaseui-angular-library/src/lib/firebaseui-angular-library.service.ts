@@ -7,7 +7,8 @@ import { Observable, Observer } from 'rxjs';
 import { DynamicLoaderService, Resource } from './dynamic-loader.service';
 import { ExtendedFirebaseUIAuthConfig, FirebaseUILanguages, FIREBASEUI_CDN_URL } from './firebaseui-angular-library.helper';
 
-type UseEmulatorArguments = [string, number];
+declare const global: any;
+
 
 @Injectable()
 export class FirebaseuiAngularLibraryService {
@@ -36,11 +37,6 @@ export class FirebaseuiAngularLibraryService {
     FirebaseuiAngularLibraryService.firebaseUiInstance$ = new Observable((observer) => {
       FirebaseuiAngularLibraryService.observer = observer;
     });
-
-    if (!FirebaseuiAngularLibraryService.firebaseUiInstance) {
-      this.setLanguage(this._firebaseUiConfig.language);
-    }
-
   }
 
   private instantiateFirebaseUI() {
@@ -49,9 +45,8 @@ export class FirebaseuiAngularLibraryService {
       auth.useEmulator(`http://${this._useEmulator.join(':')}`);
     }
 
-    // FirebaseuiAngularLibraryService.firebaseUiInstance = new firebaseui.auth.AuthUI(auth);
-    const instance = new firebaseui.auth.AuthUI(auth);
-    FirebaseuiAngularLibraryService.observer.next(instance);
+    FirebaseuiAngularLibraryService.firebaseUiInstance = new firebaseui.auth.AuthUI(auth);
+    FirebaseuiAngularLibraryService.observer.next(FirebaseuiAngularLibraryService.firebaseUiInstance);
   }
 
   //#region Changes made to the original lib to support i18n
@@ -82,9 +77,13 @@ export class FirebaseuiAngularLibraryService {
     // Otherwise we'll use a version of the same library from CDN.
     // Expose a reference to the firebase object or the firebaseui won't work
     if (typeof window !== "undefined" && typeof window.firebase === "undefined") {
-      // Semi-cheat: firebaseAppInstance is an instance of FirebaseApp, 
+      // Semi-cheat: firebaseInstance is an instance of FirebaseApp, 
       // but FirebaseUI uses an instance of the "vanilla" Firebase object (hence the cast to any and the "".firebase_" part)
       window.firebase = (this.firebaseInstance as any).firebase_;
+    }
+
+    if (typeof global !== "undefined" && typeof global["firebase"] === "undefined") {
+      global["firebase"] = (this.firebaseInstance as any).firebase_;
     }
 
     const language = languages[0];
@@ -123,10 +122,11 @@ export class FirebaseuiAngularLibraryService {
 
   /**
   * Returns the currently selected language, as an instance of FirebaseUILanguage.
-  * It could return null if the current language can't be parsed.
+  * If no previous language was set, it will return language specified in the ".forRoot" method of this module.
+  * If the parameter "language" was not set, it will defualt to English
   */
   getCurrentLanguage() {
-    return this.getLanguageByCode(FirebaseuiAngularLibraryService.currentLanguageCode);
+    return this.getLanguageByCode(FirebaseuiAngularLibraryService.currentLanguageCode || this._firebaseUiConfig.language || "en");
   }
 
   private getLanguageByCode(code: string) {
