@@ -13,9 +13,8 @@ declare const global: any;
 @Injectable()
 export class FirebaseuiAngularLibraryService {
 
-  public static firebaseUiInstance: firebaseui.auth.AuthUI | undefined = undefined;
-
-  private static firebaseUiInstance$: Observable<firebaseui.auth.AuthUI> | undefined = undefined;
+  private static firebaseUiInstance: firebaseui.auth.AuthUI | undefined = undefined;
+  private static uiInstanceObservable: Observable<firebaseui.auth.AuthUI> | undefined = undefined;
   private static observer: Observer<firebaseui.auth.AuthUI> | undefined = undefined;
 
   private static currentLanguageCode: string = "";
@@ -34,11 +33,14 @@ export class FirebaseuiAngularLibraryService {
     // noinspection JSNonASCIINames
     this.firebaseInstance = ɵfirebaseAppFactory(options, zone, nameOrConfig);
 
-    FirebaseuiAngularLibraryService.firebaseUiInstance$ = new Observable((observer) => {
+    FirebaseuiAngularLibraryService.uiInstanceObservable = new Observable((observer) => {
       FirebaseuiAngularLibraryService.observer = observer;
     });
   }
 
+  /**
+   * Creates a new instance of FirebaseUI
+   */
   private instantiateFirebaseUI() {
     const auth: _firebase.auth.Auth = this.firebaseInstance.auth();
     if (this._useEmulator) {
@@ -51,6 +53,10 @@ export class FirebaseuiAngularLibraryService {
 
   //#region Changes made to the original lib to support i18n
 
+  /**
+   * Changes language of the currently displayed Firebase UI instance
+   * @param languageCode One of the codes specified by a "FirebaseUILanguage" object
+   */
   async setLanguage(languageCode: string) {
 
     if (FirebaseuiAngularLibraryService.firebaseUiInstance) {
@@ -129,6 +135,21 @@ export class FirebaseuiAngularLibraryService {
     return this.getLanguageByCode(FirebaseuiAngularLibraryService.currentLanguageCode || this._firebaseUiConfig.language || "en");
   }
 
+  /**
+   * This method returns the Firebase UI instance once it's available.
+   */
+  getFirebaseUiInstance(): Promise<firebaseui.auth.AuthUI> {
+    return new Promise((resolve, reject) => {
+      FirebaseuiAngularLibraryService.uiInstanceObservable.subscribe((instance) => {
+        return resolve(instance);
+      });
+    });
+  }
+
+  /**
+   * Given a FirebaseUILanguage code, it returns the matching object
+   * @param code Language code
+   */
   private getLanguageByCode(code: string) {
     const matching = FirebaseUILanguages.filter((lang) => lang.code.toLowerCase() === code.toLowerCase());
 
@@ -137,18 +158,6 @@ export class FirebaseuiAngularLibraryService {
     }
 
     return null;
-  }
-
-  /**
-   * This method returns the firebaseui instance once it's available.
-   */
-  getFirebaseUiInstance(): Promise<firebaseui.auth.AuthUI> {
-    return new Promise((resolve, reject) => {
-      FirebaseuiAngularLibraryService.firebaseUiInstance$.subscribe((instance) => {
-        return resolve(instance);
-      });
-    });
-
   }
 
   //#endregion
