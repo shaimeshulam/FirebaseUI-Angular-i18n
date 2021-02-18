@@ -1,24 +1,27 @@
-import {Component, EventEmitter, Inject, NgZone, OnDestroy, OnInit, Output} from '@angular/core';
-import {AngularFireAuth} from '@angular/fire/auth';
-import {Subscription} from 'rxjs';
-import {
-  FirebaseUISignInFailure,
-  FirebaseUISignInSuccessWithAuthResult,
-  NativeFirebaseUIAuthConfig,
-} from './firebaseui-angular-library.helper';
-import * as firebaseui from 'firebaseui';
+import { Component, EventEmitter, Inject, Input, NgZone, OnChanges, OnDestroy, OnInit, Optional, Output, SimpleChanges } from '@angular/core';
+import { AngularFireAuth } from '@angular/fire/auth';
 import firebase from 'firebase/app';
-import {FirebaseuiAngularLibraryService} from './firebaseui-angular-library.service';
 import 'firebase/auth';
+import * as firebaseui from 'firebaseui';
+import { Subscription } from 'rxjs';
+import {
+  ExtendedFirebaseUIAuthConfig,
+  FirebaseUISignInFailure,
+  FirebaseUISignInSuccessWithAuthResult
+} from './firebaseui-angular-library.helper';
+import { FirebaseuiAngularLibraryService } from './firebaseui-angular-library.service';
 import User = firebase.User;
 import UserCredential = firebase.auth.UserCredential;
+
 
 @Component({
   selector: 'firebase-ui',
   template: '<div id="firebaseui-auth-container"></div>'
 })
-export class FirebaseuiAngularLibraryComponent implements OnInit, OnDestroy {
+export class FirebaseuiAngularLibraryComponent implements OnInit, OnDestroy, OnChanges {
   private static readonly COMPUTED_CALLBACKS = 'COMPUTED_CALLBACKS';
+
+  @Optional() @Input("language") language: string;
 
   @Output('signInSuccessWithAuthResult') signInSuccessWithAuthResultCallback: EventEmitter<FirebaseUISignInSuccessWithAuthResult> = new EventEmitter(); // tslint:disable-line
   @Output('signInFailure') signInFailureCallback: EventEmitter<FirebaseUISignInFailure> = new EventEmitter(); // tslint:disable-line
@@ -27,24 +30,29 @@ export class FirebaseuiAngularLibraryComponent implements OnInit, OnDestroy {
   private subscription: Subscription;
 
   constructor(private angularFireAuth: AngularFireAuth,
-              @Inject('firebaseUIAuthConfig') private _firebaseUiConfig: NativeFirebaseUIAuthConfig,
-              @Inject('firebaseUIAuthConfigFeature') private _firebaseUiConfig_Feature: NativeFirebaseUIAuthConfig,
-              private ngZone: NgZone,
-              private firebaseUIService: FirebaseuiAngularLibraryService) {
+    @Inject('firebaseUIAuthConfig') private _firebaseUiConfig: ExtendedFirebaseUIAuthConfig,
+    @Inject('firebaseUIAuthConfigFeature') private _firebaseUiConfig_Feature: ExtendedFirebaseUIAuthConfig,
+    private ngZone: NgZone,
+    private firebaseUIService: FirebaseuiAngularLibraryService) {
   }
 
-  get firebaseUiConfig(): NativeFirebaseUIAuthConfig {
+  async ngOnChanges(changes: SimpleChanges) {
+    await this.firebaseUIService.setLanguage(changes.language.currentValue);
+    this.firebaseUIPopup();
+  }
+
+  get firebaseUiConfig(): ExtendedFirebaseUIAuthConfig {
     return {
       ...this._firebaseUiConfig,
       ...this._firebaseUiConfig_Feature
-    } as NativeFirebaseUIAuthConfig;
+    };
   }
 
   ngOnInit(): void {
-    this.subscription = this.angularFireAuth.authState.subscribe((value: User) => {
+    this.subscription = this.angularFireAuth.authState.subscribe(async (value: User) => {
       if ((value && value.isAnonymous) || !value) {
         if (this.firebaseUiConfig.signInOptions.length !== 0) {
-          this.firebaseUIPopup();
+          await this.firebaseUIPopup();
         } else {
           throw new Error('There must be at least one AuthProvider.');
         }
@@ -58,16 +66,16 @@ export class FirebaseuiAngularLibraryComponent implements OnInit, OnDestroy {
     }
   }
 
-  private getUIAuthConfig(): NativeFirebaseUIAuthConfig {
-    if (!(this.firebaseUiConfig as NativeFirebaseUIAuthConfig).callbacks) {
+  private getUIAuthConfig(): ExtendedFirebaseUIAuthConfig {
+    if (!this.firebaseUiConfig.callbacks) {
       this._firebaseUiConfig[FirebaseuiAngularLibraryComponent.COMPUTED_CALLBACKS] = true;
-      (this._firebaseUiConfig as NativeFirebaseUIAuthConfig).callbacks = this.getCallbacks();
+      this._firebaseUiConfig.callbacks = this.getCallbacks();
     }
-    return (this.firebaseUiConfig as NativeFirebaseUIAuthConfig);
+    return this.firebaseUiConfig;
   }
 
-  private firebaseUIPopup() {
-    const firebaseUiInstance = this.firebaseUIService.firebaseUiInstance;
+  private async firebaseUIPopup() {
+    const firebaseUiInstance = await this.firebaseUIService.getFirebaseUiInstance();
     const uiAuthConfig = this.getUIAuthConfig();
 
     // Check if callbacks got computed to reset them again after providing the to firebaseui.
@@ -78,11 +86,13 @@ export class FirebaseuiAngularLibraryComponent implements OnInit, OnDestroy {
       delete uiAuthConfig[FirebaseuiAngularLibraryComponent.COMPUTED_CALLBACKS];
     }
 
+    delete uiAuthConfig.language;
+
     // show the firebaseui
     firebaseUiInstance.start('#firebaseui-auth-container', uiAuthConfig);
 
     if (resetCallbacks) {
-      (this._firebaseUiConfig as NativeFirebaseUIAuthConfig).callbacks = null;
+      this._firebaseUiConfig.callbacks = null;
     }
   }
 

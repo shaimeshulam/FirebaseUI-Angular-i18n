@@ -1,15 +1,15 @@
-import {BrowserModule} from '@angular/platform-browser';
-import {NgModule} from '@angular/core';
-import {FormsModule} from '@angular/forms';
-import {AppComponent} from './app.component';
-import {firebase, firebaseui, FirebaseUIModule} from 'firebaseui-angular';
-import {environment} from '../environments/environment';
-import {AppRoutingModule} from './app-routing.module';
-import {AngularFireModule} from '@angular/fire';
-import {AngularFireAuthModule} from '@angular/fire/auth';
+import { BrowserModule } from '@angular/platform-browser';
+import { NgModule } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { AppComponent } from './app.component';
+import { ExtendedFirebaseUIAuthConfig, firebase, firebaseui, FirebaseUIModule } from 'firebaseui-angular';
+import { environment } from '../environments/environment';
+import { AppRoutingModule } from './app-routing.module';
+import { AngularFireModule } from '@angular/fire';
+import { AngularFireAuthModule } from '@angular/fire/auth';
 
 
-const firebaseUiAuthConfig: firebaseui.auth.Config = {
+const firebaseUiAuthConfig: ExtendedFirebaseUIAuthConfig = {
   signInFlow: 'popup',
   signInOptions: [
     firebase.auth.GoogleAuthProvider.PROVIDER_ID,
@@ -36,7 +36,9 @@ const firebaseUiAuthConfig: firebaseui.auth.Config = {
   ],
   tosUrl: '<your-tos-link>',
   privacyPolicyUrl: '<your-privacyPolicyUrl-link>',
-  credentialHelper: firebaseui.auth.CredentialHelper.GOOGLE_YOLO
+  credentialHelper: firebaseui.auth.CredentialHelper.GOOGLE_YOLO,
+
+  language: "it"
 };
 
 @NgModule({
