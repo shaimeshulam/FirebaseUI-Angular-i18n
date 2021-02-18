@@ -6,6 +6,7 @@
     "module": "es6",
     "declaration": true,
     "inlineSources": true,
+    "resolveJsonModule": true,
     "types": [],
     "lib": [
       "dom",

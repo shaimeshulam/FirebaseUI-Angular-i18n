@@ -3,8 +3,8 @@
  * Copyright (c) 2017 Raphael Jenni
  */
 
-import * as firebaseuiOriginal from 'firebaseui';
 import firebaseOriginal from 'firebase/app';
+import * as firebaseuiOriginal from 'firebaseui';
 import UserCredential = firebaseOriginal.auth.UserCredential;
 import AuthCredential = firebaseOriginal.auth.AuthCredential;
 
@@ -77,7 +77,3 @@ export const FirebaseUILanguages: FirebaseUILanguage[] = [
   { code: "uk", name: "Ukrainian" },
   { code: "vi", name: "Vietnamese" }
 ];
-
-// TODO: get this from "firebaseui"?
-export const FIREBASEUI_CDN_VERSION = "4.7.3";
-export const FIREBASEUI_CDN_URL = `https://www.gstatic.com/firebasejs/ui/${FIREBASEUI_CDN_VERSION}`;

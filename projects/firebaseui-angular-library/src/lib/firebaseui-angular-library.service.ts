@@ -5,9 +5,13 @@ import _firebase from 'firebase/app';
 import * as firebaseui from 'firebaseui';
 import { Observable, Observer } from 'rxjs';
 import { DynamicLoaderService, Resource } from './dynamic-loader.service';
-import { ExtendedFirebaseUIAuthConfig, FirebaseUILanguages, FIREBASEUI_CDN_URL } from './firebaseui-angular-library.helper';
+import { ExtendedFirebaseUIAuthConfig, FirebaseUILanguages } from './firebaseui-angular-library.helper';
+import * as jsonVersion from "./version.json";
 
 declare const global: any;
+
+const FIREBASEUI_CDN_VERSION = jsonVersion.firebaseUiVersion || "4.7.3";
+const FIREBASEUI_CDN_URL = `https://www.gstatic.com/firebasejs/ui/${FIREBASEUI_CDN_VERSION}`;
 
 
 @Injectable()
