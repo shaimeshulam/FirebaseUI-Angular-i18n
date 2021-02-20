@@ -1,9 +1,9 @@
 {
-  "name": "firebaseui-angular",
+  "name": "firebaseui-angular-i18n",
   "version": "5.1.2",
   "repository": {
     "type": "git",
-    "url": "https://github.com/RaphaelJenni/firebaseui-angular"
+    "url": "https://github.com/l0ll098/FirebaseUI-Angular-i18n"
   },
   "author": {
     "name": "Raphael Jenni",
@@ -13,11 +13,13 @@
     "angular",
     "firebase",
     "firebaseui",
-    "angularfire2"
+    "angularfire2",
+    "firebaseui-i18n",
+    "i18n"
   ],
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/RaphaelJenni/firebaseui-angular/issues"
+    "url": "https://github.com/l0ll098/FirebaseUI-Angular-i18n/issues"
   },
   "peerDependencies": {
     "@angular/common": "^6.1.2 || ^7.0.0 || ^8.0.0 || ^9.0.0 || ^10.0.0 || ^11.0.0",

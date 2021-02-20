@@ -1,15 +1,34 @@
-[![Build Status](https://travis-ci.org/RaphaelJenni/FirebaseUI-Angular.svg?branch=master)](https://travis-ci.org/RaphaelJenni/FirebaseUI-Angular)
-[![npm version](https://badge.fury.io/js/firebaseui-angular.svg)](https://badge.fury.io/js/firebaseui-angular)
+[![npm version](https://badge.fury.io/js/firebaseui-angular-i18n.svg)](https://badge.fury.io/js/firebaseui-angular-i18n)
 
-# FirebaseUi-Angular
+# firebaseui-angular-i18n
 
-![Screenshot of Login screen](https://raw.githubusercontent.com/RaphaelJenni/FirebaseUI-Angular/master/assets/LoginScreen.PNG)
+![Screenshot of Login screen](https://raw.githubusercontent.com/l0ll098/firebaseui-angular-i18n/master/assets/LoginScreen.PNG)
+
+## Why does this fork exist?
+This is a fork of the original [RaphaelJenni/FirebaseUI-Angular](https://github.com/RaphaelJenni/FirebaseUI-Angular) project.
+This version adds support for internationalization of the FirebaseUI widget in several languages, both LtR and RtL, as shown in the screenshots above.
+The i18n process is handled directly by the FirebaseUI library, except for the fact that it's not. Yeah, I'm not crazy, it's really like that.
+An [issue about this stuff](https://github.com/firebase/firebaseui-web/issues/242) was opened way back in the end of 2017 (in the official FirebaseUI repo). 
+Since then almost nothig as changed, so I decided to implement it :)
+
+The [firebaseui](https://www.npmjs.com/package/firebaseui) NPM package ships with only one language: English. 
+That's not the only way of including a library in your project, though. You could also include it from a CDN. 
+As it turns out, the official CDN has a localized version of each script we need to show the FirebaseUI widget.
+So, this fork internally does some tricks to dynamically load those localized versions.
+
+This forked version tackles these issues:
+ - [firebase/firebaseui-web#242](https://github.com/firebase/firebaseui-web/issues/242)
+ - [RaphaelJenni/FirebaseUI-Angular#115](https://github.com/RaphaelJenni/FirebaseUI-Angular/issues/115)
+ - [RaphaelJenni/FirebaseUI-Angular#102](https://github.com/RaphaelJenni/FirebaseUI-Angular/issues/102)
+ - [RaphaelJenni/FirebaseUI-Angular#42](https://github.com/RaphaelJenni/FirebaseUI-Angular/issues/42)
+ - [RaphaelJenni/FirebaseUI-Angular#39](https://github.com/RaphaelJenni/FirebaseUI-Angular/issues/39)
+Changes included in this fork were discussed [here in the original pull request](https://github.com/RaphaelJenni/FirebaseUI-Angular/pull/120)
 
 ## Compatibility
 
-| Angular | Firebase | AngularFire  | FirebaseUI | FirebaseUI-Angular | Note                            |
+| Angular | Firebase | AngularFire  | FirebaseUI | firebaseui-angular-i18n | Note                            |
 | --------|----------|--------------|------------|--------------------|---------------------------------|
-| 11.0.2  | ^8.2.4   | ^6.1.1       | ^4.7.2     | 5.1.2              | *support for [auth emulator](https://firebase.google.com/docs/emulator-suite/connect_auth)*   |
+| 11.0.2  | ^8.2.4   | ^6.1.1       | ^4.7.2     | 5.1.2              | *support for [auth emulator](https://firebase.google.com/docs/emulator-suite/connect_auth) and i18n*   |
 | 11.0.2  | ^8.1.1   | ^6.1.1       | ^4.7.1     | 5.1.1              |                                 |
 | 10.2.2  | ^8.0.1   | ^6.0.4       | ^4.7.1     | 5.1.0              |                                 |
 | ~8.2.13 | ^7.23.0  | ~5.2.1       | ~4.7.1     | ~4.0.1             |                                 |
@@ -22,14 +41,14 @@
 To install this library, run:
 
 ```bash
-$ npm install firebaseui-angular --save
+$ npm install firebaseui-angular-i18n --save
 ```
 
 To run this library you need to have [AngularFire2](https://github.com/angular/angularfire2), [Firebase](https://firebase.google.com/docs/web/setup),
 [FirebaseUI-Web](https://github.com/firebase/firebaseui-web) installed.
 Fast install:
 ```bash
-$ npm install firebase firebaseui @angular/fire firebaseui-angular --save
+$ npm install firebase firebaseui @angular/fire firebaseui-angular-i18n --save
 ```
 
 ## How to use
@@ -42,14 +61,14 @@ import {BrowserModule} from '@angular/platform-browser';
 import {NgModule} from '@angular/core';
 import {FormsModule} from '@angular/forms';
 import {AppComponent} from './app.component';
-import {firebase, firebaseui, FirebaseUIModule} from 'firebaseui-angular';
+import {ExtendedFirebaseUIAuthConfig, firebase, firebaseui, FirebaseUIModule} from 'firebaseui-angular-i18n';
 import {environment} from '../environments/environment';
 import {AppRoutingModule} from './app-routing.module';
 import {AngularFireModule} from '@angular/fire';
 import {AngularFireAuthModule, USE_EMULATOR as USE_AUTH_EMULATOR} from '@angular/fire/auth';
 
 
-const firebaseUiAuthConfig: firebaseui.auth.Config = {
+const firebaseUiAuthConfig: ExtendedFirebaseUIAuthConfig = {
   signInFlow: 'popup',
   signInOptions: [
     firebase.auth.GoogleAuthProvider.PROVIDER_ID,
@@ -76,7 +95,10 @@ const firebaseUiAuthConfig: firebaseui.auth.Config = {
   ],
   tosUrl: '<your-tos-link>',
   privacyPolicyUrl: '<your-privacyPolicyUrl-link>',
-  credentialHelper: firebaseui.auth.CredentialHelper.GOOGLE_YOLO
+  credentialHelper: firebaseui.auth.CredentialHelper.GOOGLE_YOLO,
+
+  // Optional. Set it to override the default language (English)
+  language: "it"
 };
 
 @NgModule({
@@ -167,7 +189,7 @@ Once everything is set up, you can use the component in your Angular application
 ### Configuration
 For the configuration of the module see the official firebaseui documentation: [Config](https://github.com/firebase/firebaseui-web#configuration)
 
-_If you use a version prior to 3.3.0 check the [old README](https://github.com/RaphaelJenni/FirebaseUI-Angular/blob/v3.2.0/README.MD)_
+_If you use a version prior to 3.3.0 check the [old README](https://github.com/l0ll098/firebaseui-angular-i18n/blob/v3.2.0/README.MD)_
 
 
 #### forRoot/forFeature
@@ -240,15 +262,15 @@ constructor(private firebaseuiAngularLibraryService: FirebaseuiAngularLibrarySer
 
 Step 1: Fork and clone the repo from Github.
 
-Step 2: There is a sample project in the root folder. Execute the following command in the root folder i.e. .../FirebaseUI-Angular > `npm install`
+Step 2: There is a sample project in the root folder. Execute the following command in the root folder i.e. .../firebaseui-angular-i18n > `npm install`
 
 Step 3: Ensure that you are using Angular CLI version >10. You can check your version with `ng --version` in the terminal.
 
 Step 4: Replace with your firebase config in `src\environments\environment.ts`.
 
-Step 5: .../FirebaseUI-Angular > `npm run build-lib`
+Step 5: .../firebaseui-angular-i18n > `npm run build-lib`
 
-Step 6: .../FirebaseUI-Angular > `ng serve`
+Step 6: .../firebaseui-angular-i18n > `ng serve`
 
 You're welcome to fork the repo and contribute to library sources in `projects` > `firebaseui-angular-library` > `src` > `lib`.
 
@@ -268,7 +290,7 @@ Module not found: Error: Can't resolve 'firebaseui/dist/index' in '...'
 
 Use the firebase and firebaseui instances exposed by the plugin:
 
-`import {..., firebase, firebaseui} from 'firebaseui-angular';`
+`import {..., firebase, firebaseui} from 'firebaseui-angular-i18n';`
 
 ### CSS not loaded
 If you have added the css to the angular.json but nothing happened. Try to restart the server (`Ctrl-C` and `ng serve`)
@@ -297,3 +319,4 @@ This will stop this error message.
 ## License
 
 MIT © [Raphael Jenni](mailto:info@rjenni.ch)
+MIT © [l0ll098](https://github.com/l0ll098/)
