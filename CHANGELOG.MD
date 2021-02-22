@@ -1,17 +1,15 @@
 # Changelog
 
-Even though this is a fork, it will follow the same version numbers as the original project.
-First forked version is [5.1.2](#5.1.2-(original)).
+Even though this is a fork, it will follow the same version numbers as the original project (as much as possible).
 
 
-## 5.1.2 (forked)
+## 5.1.3
 * _First forked version_
 * Added support for internationalization (i18n) of the Firebase UI widget
 
-
 ----
 
-## 5.1.2 (original)
+## 5.1.2
 * Add support for Auth Emulator [#142](https://github.com/RaphaelJenni/FirebaseUI-Angular/issues/142)
 
 ## 5.1.1

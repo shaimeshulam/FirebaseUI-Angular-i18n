@@ -1,13 +1,13 @@
 {
   "name": "firebaseui-angular-i18n",
-  "version": "5.1.2",
+  "version": "5.1.3",
   "repository": {
     "type": "git",
     "url": "https://github.com/l0ll098/FirebaseUI-Angular-i18n"
   },
   "author": {
-    "name": "Raphael Jenni",
-    "email": "info@rjenni.ch"
+    "name": "l0ll098",
+    "email": "l0ll098dev@gmail.com"
   },
   "keywords": [
     "angular",

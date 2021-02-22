@@ -26,13 +26,15 @@ Changes included in this fork were discussed [here in the original pull request]
 
 ## Compatibility
 
-| Angular | Firebase | AngularFire  | FirebaseUI | firebaseui-angular-i18n | Note                            |
-| --------|----------|--------------|------------|--------------------|---------------------------------|
-| 11.0.2  | ^8.2.4   | ^6.1.1       | ^4.7.2     | 5.1.2              | *support for [auth emulator](https://firebase.google.com/docs/emulator-suite/connect_auth) and i18n*   |
-| 11.0.2  | ^8.1.1   | ^6.1.1       | ^4.7.1     | 5.1.1              |                                 |
-| 10.2.2  | ^8.0.1   | ^6.0.4       | ^4.7.1     | 5.1.0              |                                 |
-| ~8.2.13 | ^7.23.0  | ~5.2.1       | ~4.7.1     | ~4.0.1             |                                 |
+| Angular | Firebase | AngularFire  | FirebaseUI | firebaseui-angular-i18n | Note                       |
+| --------|----------|--------------|------------|-------------------------|---------------------------------|
+| 11.0.2  | ^8.2.4   | ^6.1.1       | ^4.7.2     | 5.1.3                   | *support for i18n*              |
+| 11.0.2  | ^8.2.4   | ^6.1.1       | ^4.7.2     | 5.1.2                   | *support for [auth emulator](https://firebase.google.com/docs/emulator-suite/connect_auth)*   |
+| 11.0.2  | ^8.1.1   | ^6.1.1       | ^4.7.1     | 5.1.1                   |                                 |
+| 10.2.2  | ^8.0.1   | ^6.0.4       | ^4.7.1     | 5.1.0                   |                                 |
+| ~8.2.13 | ^7.23.0  | ~5.2.1       | ~4.7.1     | ~4.0.1                  |                                 |
 
+_Note_: Versions prior to v5.1.3 of this lib are available in the [original project](https://github.com/RaphaelJenni/FirebaseUI-Angular).
 
 <sub>Version combinations not documented here __may__ work but are untested.</sub>
 
@@ -318,5 +320,5 @@ This will stop this error message.
 
 ## License
 
-MIT © [Raphael Jenni](mailto:info@rjenni.ch)
+MIT © [Raphael Jenni](mailto:info@rjenni.ch) <br>
 MIT © [l0ll098](https://github.com/l0ll098/)
