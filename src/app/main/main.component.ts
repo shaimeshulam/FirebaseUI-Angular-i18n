@@ -1,7 +1,7 @@
-import {Component, OnInit} from '@angular/core';
-import {AngularFireAuth} from '@angular/fire/auth';
-import {FirebaseUISignInFailure, FirebaseUISignInSuccessWithAuthResult} from 'firebaseui-angular';
-import {Router} from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import { AngularFireAuth } from '@angular/fire/auth';
+import { Router } from '@angular/router';
+import { FirebaseuiAngularLibraryService, FirebaseUILanguages, FirebaseUISignInFailure, FirebaseUISignInSuccessWithAuthResult } from 'firebaseui-angular';
 
 @Component({
   selector: 'fbui-ng-main',
@@ -10,8 +10,16 @@ import {Router} from '@angular/router';
 })
 export class MainComponent implements OnInit {
 
+  public languages = FirebaseUILanguages;
+  public currentLang: string = "";
 
-  constructor(private afAuth: AngularFireAuth, private router: Router) {
+  constructor(
+    private afAuth: AngularFireAuth,
+    private router: Router,
+    private firebaseUiService: FirebaseuiAngularLibraryService) {
+
+    // Update the select element to match the language specified in the app.module.ts file during the initial configuration
+    this.currentLang = this.firebaseUiService.getCurrentLanguage().code;
   }
 
   ngOnInit(): void {

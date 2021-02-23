@@ -1,6 +1,12 @@
 <h1>FirebaseUI-Angular Sample</h1>
 <firebase-ui (signInSuccessWithAuthResult)="successCallback($event)"
              (signInFailure)="errorCallback($event)"
-             (uiShown)="uiShownCallback()"></firebase-ui>
+             (uiShown)="uiShownCallback()"
+             [language]="currentLang"></firebase-ui>
+             
+<select [(ngModel)]="currentLang">
+    <option *ngFor="let lang of languages" [value]="lang.code">{{lang.name}}</option>
+</select>
+
 <button (click)="logout()">Logout</button>
 <button [routerLink]="['/page']">To second page</button>
