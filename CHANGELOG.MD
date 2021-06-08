@@ -2,6 +2,8 @@
 
 Even though this is a fork, it will follow the same version numbers as the original project (as much as possible).
 
+## 5.1.4
+* Bug fix: racing conditions cause error "Uncaught (in promise): TypeError: Cannot read property 'next' of undefined" [#3](https://github.com/l0ll098/FirebaseUI-Angular-i18n/pull/3) (Thanks to @shaimeshulam)
 
 ## 5.1.3
 * _First forked version_

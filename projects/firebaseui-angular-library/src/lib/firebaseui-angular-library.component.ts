@@ -41,8 +41,8 @@ export class FirebaseuiAngularLibraryComponent implements OnInit, OnDestroy, OnC
     });
   }
 
-  ngOnChanges(changes: SimpleChanges) {
-      this.firebaseUIService.setLanguage(changes.language.currentValue);
+  async ngOnChanges(changes: SimpleChanges) {
+    await this.firebaseUIService.setLanguage(changes.language.currentValue);
   }
 
   get firebaseUiConfig(): ExtendedFirebaseUIAuthConfig {
@@ -53,11 +53,11 @@ export class FirebaseuiAngularLibraryComponent implements OnInit, OnDestroy, OnC
   }
 
   ngOnInit(): void {
-    this.subscription = this.angularFireAuth.authState.subscribe( (value: User) => {
+    this.subscription = this.angularFireAuth.authState.subscribe((value: User) => {
       if ((value && value.isAnonymous) || !value) {
         if (this.firebaseUiConfig.signInOptions.length !== 0) {
           // initialization of ngOnChanges occurs only when language value is accepted as @input. fire manually if it is not
-          if (this.language === undefined) {
+          if (!this.language) {
             this.firebaseUIService.setLanguage('en');
           }
         } else {
@@ -84,7 +84,7 @@ export class FirebaseuiAngularLibraryComponent implements OnInit, OnDestroy, OnC
     return this.firebaseUiConfig;
   }
 
-  private firebaseUIPopup(firebaseUiInstance) {
+  private firebaseUIPopup(firebaseUiInstance: AuthUI) {
     const uiAuthConfig = this.getUIAuthConfig();
 
     // Check if callbacks got computed to reset them again after providing the to firebaseui.
@@ -106,7 +106,7 @@ export class FirebaseuiAngularLibraryComponent implements OnInit, OnDestroy, OnC
   }
 
   private getCallbacks(): any { // firebaseui.Callbacks
-    const signInSuccessWithAuthResultCallback = (authResult: UserCredential, redirectUrl) => {
+    const signInSuccessWithAuthResultCallback = (authResult: UserCredential, redirectUrl: string) => {
       this.ngZone.run(() => {
         this.signInSuccessWithAuthResultCallback.emit({
           authResult,
