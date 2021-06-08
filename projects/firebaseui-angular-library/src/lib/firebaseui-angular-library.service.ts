@@ -3,7 +3,7 @@ import { FirebaseApp, FirebaseAppConfig, FirebaseOptions, FIREBASE_APP_NAME, FIR
 import { USE_EMULATOR as USE_AUTH_EMULATOR } from '@angular/fire/auth';
 import _firebase from 'firebase/app';
 import * as firebaseui from 'firebaseui';
-import { Observable, Observer } from 'rxjs';
+import {Subject} from 'rxjs';
 import { DynamicLoaderService, Resource } from './dynamic-loader.service';
 import { ExtendedFirebaseUIAuthConfig, FirebaseUILanguages } from './firebaseui-angular-library.helper';
 import * as jsonVersion from "./version.json";
@@ -18,8 +18,7 @@ const FIREBASEUI_CDN_URL = `https://www.gstatic.com/firebasejs/ui/${FIREBASEUI_C
 export class FirebaseuiAngularLibraryService {
 
   private static firebaseUiInstance: firebaseui.auth.AuthUI | undefined = undefined;
-  private static uiInstanceObservable: Observable<firebaseui.auth.AuthUI> | undefined = undefined;
-  private static observer: Observer<firebaseui.auth.AuthUI> | undefined = undefined;
+  private static uiInstanceObservable: Subject<firebaseui.auth.AuthUI> = new Subject<firebaseui.auth.AuthUI>();
 
   private static currentLanguageCode: string = "";
   private static firstLoad: boolean = true;
@@ -36,10 +35,6 @@ export class FirebaseuiAngularLibraryService {
 
     // noinspection JSNonASCIINames
     this.firebaseInstance = ɵfirebaseAppFactory(options, zone, nameOrConfig);
-
-    FirebaseuiAngularLibraryService.uiInstanceObservable = new Observable((observer) => {
-      FirebaseuiAngularLibraryService.observer = observer;
-    });
   }
 
   /**
@@ -52,7 +47,7 @@ export class FirebaseuiAngularLibraryService {
     }
 
     FirebaseuiAngularLibraryService.firebaseUiInstance = new firebaseui.auth.AuthUI(auth);
-    FirebaseuiAngularLibraryService.observer.next(FirebaseuiAngularLibraryService.firebaseUiInstance);
+    FirebaseuiAngularLibraryService.uiInstanceObservable.next(FirebaseuiAngularLibraryService.firebaseUiInstance);
   }
 
   //#region Changes made to the original lib to support i18n
@@ -87,7 +82,7 @@ export class FirebaseuiAngularLibraryService {
     // Otherwise we'll use a version of the same library from CDN.
     // Expose a reference to the firebase object or the firebaseui won't work
     if (typeof window !== "undefined" && typeof window.firebase === "undefined") {
-      // Semi-cheat: firebaseInstance is an instance of FirebaseApp, 
+      // Semi-cheat: firebaseInstance is an instance of FirebaseApp,
       // but FirebaseUI uses an instance of the "vanilla" Firebase object (hence the cast to any and the "".firebase_" part)
       window.firebase = (this.firebaseInstance as any).firebase_;
     }
@@ -114,7 +109,7 @@ export class FirebaseuiAngularLibraryService {
       });
     }
 
-    // If we had previsouly loaded another language that was a RtL one and current one is not, 
+    // If we had previsouly loaded another language that was a RtL one and current one is not,
     //    we need to load the LtR css
     if (previousLanguage && previousLanguage.isRtL && !language.isRtL) {
       toLoad.push({
@@ -140,15 +135,9 @@ export class FirebaseuiAngularLibraryService {
   }
 
   /**
-   * This method returns the Firebase UI instance once it's available.
+   * This method returns the observable of the Firebase UI instance
    */
-  getFirebaseUiInstance(): Promise<firebaseui.auth.AuthUI> {
-    return new Promise((resolve, reject) => {
-      FirebaseuiAngularLibraryService.uiInstanceObservable.subscribe((instance) => {
-        return resolve(instance);
-      });
-    });
-  }
+  getFirebaseUiObservable = () => FirebaseuiAngularLibraryService.uiInstanceObservable;
 
   /**
    * Given a FirebaseUILanguage code, it returns the matching object

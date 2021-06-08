@@ -12,6 +12,7 @@ import {
 import { FirebaseuiAngularLibraryService } from './firebaseui-angular-library.service';
 import User = firebase.User;
 import UserCredential = firebase.auth.UserCredential;
+import AuthUI = firebaseui.auth.AuthUI;
 
 
 @Component({
@@ -20,6 +21,7 @@ import UserCredential = firebase.auth.UserCredential;
 })
 export class FirebaseuiAngularLibraryComponent implements OnInit, OnDestroy, OnChanges {
   private static readonly COMPUTED_CALLBACKS = 'COMPUTED_CALLBACKS';
+  private firebaseUISubscription: Subscription;
 
   @Optional() @Input("language") language: string;
 
@@ -34,11 +36,13 @@ export class FirebaseuiAngularLibraryComponent implements OnInit, OnDestroy, OnC
     @Inject('firebaseUIAuthConfigFeature') private _firebaseUiConfig_Feature: ExtendedFirebaseUIAuthConfig,
     private ngZone: NgZone,
     private firebaseUIService: FirebaseuiAngularLibraryService) {
+    this.firebaseUISubscription = this.firebaseUIService.getFirebaseUiObservable().subscribe((fireUIInstance: AuthUI) => {
+      this.firebaseUIPopup(fireUIInstance);
+    });
   }
 
-  async ngOnChanges(changes: SimpleChanges) {
-    await this.firebaseUIService.setLanguage(changes.language.currentValue);
-    this.firebaseUIPopup();
+  ngOnChanges(changes: SimpleChanges) {
+      this.firebaseUIService.setLanguage(changes.language.currentValue);
   }
 
   get firebaseUiConfig(): ExtendedFirebaseUIAuthConfig {
@@ -49,10 +53,13 @@ export class FirebaseuiAngularLibraryComponent implements OnInit, OnDestroy, OnC
   }
 
   ngOnInit(): void {
-    this.subscription = this.angularFireAuth.authState.subscribe(async (value: User) => {
+    this.subscription = this.angularFireAuth.authState.subscribe( (value: User) => {
       if ((value && value.isAnonymous) || !value) {
         if (this.firebaseUiConfig.signInOptions.length !== 0) {
-          await this.firebaseUIPopup();
+          // initialization of ngOnChanges occurs only when language value is accepted as @input. fire manually if it is not
+          if (this.language === undefined) {
+            this.firebaseUIService.setLanguage('en');
+          }
         } else {
           throw new Error('There must be at least one AuthProvider.');
         }
@@ -64,6 +71,9 @@ export class FirebaseuiAngularLibraryComponent implements OnInit, OnDestroy, OnC
     if (!!this.subscription) {
       this.subscription.unsubscribe();
     }
+    if (!!this.firebaseUISubscription) {
+      this.firebaseUISubscription.unsubscribe();
+    }
   }
 
   private getUIAuthConfig(): ExtendedFirebaseUIAuthConfig {
@@ -74,8 +84,7 @@ export class FirebaseuiAngularLibraryComponent implements OnInit, OnDestroy, OnC
     return this.firebaseUiConfig;
   }
 
-  private async firebaseUIPopup() {
-    const firebaseUiInstance = await this.firebaseUIService.getFirebaseUiInstance();
+  private firebaseUIPopup(firebaseUiInstance) {
     const uiAuthConfig = this.getUIAuthConfig();
 
     // Check if callbacks got computed to reset them again after providing the to firebaseui.
