@@ -1,9 +1,10 @@
 import { Inject, Injectable, NgZone, Optional } from '@angular/core';
-import { FirebaseApp, FirebaseAppConfig, FirebaseOptions, FIREBASE_APP_NAME, FIREBASE_OPTIONS, ɵfirebaseAppFactory } from '@angular/fire';
-import { USE_EMULATOR as USE_AUTH_EMULATOR } from '@angular/fire/auth';
-import _firebase from 'firebase/app';
+import { FirebaseApp, FIREBASE_APP_NAME, FIREBASE_OPTIONS, ɵfirebaseAppFactory } from '@angular/fire/compat';
+import { USE_EMULATOR as USE_AUTH_EMULATOR } from '@angular/fire/compat/auth';
+import { FirebaseAppSettings, FirebaseOptions } from 'firebase/app';
+import _firebase from 'firebase/compat/app';
 import * as firebaseui from 'firebaseui';
-import {Subject} from 'rxjs';
+import { Subject } from 'rxjs';
 import { DynamicLoaderService, Resource } from './dynamic-loader.service';
 import { ExtendedFirebaseUIAuthConfig, FirebaseUILanguages } from './firebaseui-angular-library.helper';
 import * as jsonVersion from "./version.json";
@@ -28,7 +29,7 @@ export class FirebaseuiAngularLibraryService {
   constructor(
     @Inject('firebaseUIAuthConfig') private _firebaseUiConfig: ExtendedFirebaseUIAuthConfig,
     @Inject(FIREBASE_OPTIONS) options: FirebaseOptions,
-    @Optional() @Inject(FIREBASE_APP_NAME) nameOrConfig: string | FirebaseAppConfig | null | undefined,
+    @Optional() @Inject(FIREBASE_APP_NAME) nameOrConfig: string | FirebaseAppSettings | null | undefined,
     @Optional() @Inject(USE_AUTH_EMULATOR) private _useEmulator: any, // can't use the tuple here
     private _scriptLoaderService: DynamicLoaderService,
     zone: NgZone) {
@@ -57,7 +58,6 @@ export class FirebaseuiAngularLibraryService {
    * @param languageCode One of the codes specified by a "FirebaseUILanguage" object
    */
   async setLanguage(languageCode: string) {
-
     if (FirebaseuiAngularLibraryService.firebaseUiInstance) {
       await FirebaseuiAngularLibraryService.firebaseUiInstance.delete();
     }
@@ -84,11 +84,11 @@ export class FirebaseuiAngularLibraryService {
     if (typeof window !== "undefined" && typeof window.firebase === "undefined") {
       // Semi-cheat: firebaseInstance is an instance of FirebaseApp,
       // but FirebaseUI uses an instance of the "vanilla" Firebase object (hence the cast to any and the "".firebase_" part)
-      window.firebase = (this.firebaseInstance as any).firebase_;
+      (window as any).firebase = _firebase;
     }
 
     if (typeof global !== "undefined" && typeof global["firebase"] === "undefined") {
-      global["firebase"] = (this.firebaseInstance as any).firebase_;
+      global["firebase"] = _firebase;
     }
 
     const language = languages[0];

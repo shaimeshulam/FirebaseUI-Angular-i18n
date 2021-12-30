@@ -3,7 +3,7 @@
  * Copyright (c) 2017 Raphael Jenni
  */
 
-import firebaseOriginal from 'firebase/app';
+import firebaseOriginal from 'firebase/compat/app';
 import * as firebaseuiOriginal from 'firebaseui';
 import UserCredential = firebaseOriginal.auth.UserCredential;
 import AuthCredential = firebaseOriginal.auth.AuthCredential;
