@@ -28,12 +28,14 @@ Changes included in this fork were discussed [here in the original pull request]
 
 | Angular | Firebase | AngularFire  | FirebaseUI | firebaseui-angular-i18n | Note                       |
 | --------|----------|--------------|------------|-------------------------|---------------------------------|
+| 13.0.0  | ^9.3.0   | ^7.1.1       | ^6.0.0     | 6.1.0                   |                                 |
 | 12.1.0  | ^9.0.2   | ^7.0.4       | ^6.0.0     | 6.0.0                   |                                 |
 | 11.0.2  | ^8.2.4   | ^6.1.1       | ^4.7.2     | 5.1.3                   | *support for i18n*              |
 | 11.0.2  | ^8.2.4   | ^6.1.1       | ^4.7.2     | 5.1.2                   | *support for [auth emulator](https://firebase.google.com/docs/emulator-suite/connect_auth)*   |
 | 11.0.2  | ^8.1.1   | ^6.1.1       | ^4.7.1     | 5.1.1                   |                                 |
 | 10.2.2  | ^8.0.1   | ^6.0.4       | ^4.7.1     | 5.1.0                   |                                 |
 | ~8.2.13 | ^7.23.0  | ~5.2.1       | ~4.7.1     | ~4.0.1                  |                                 |
+
 
 _Note_: Versions prior to v5.1.3 of this lib are available in the [original project](https://github.com/RaphaelJenni/FirebaseUI-Angular).
 
@@ -67,8 +69,8 @@ import {AppComponent} from './app.component';
 import {ExtendedFirebaseUIAuthConfig, firebase, firebaseui, FirebaseUIModule} from 'firebaseui-angular-i18n';
 import {environment} from '../environments/environment';
 import {AppRoutingModule} from './app-routing.module';
-import {AngularFireModule} from '@angular/fire';
-import {AngularFireAuthModule, USE_EMULATOR as USE_AUTH_EMULATOR} from '@angular/fire/auth';
+import { AngularFireModule } from "@angular/fire/compat";
+import { AngularFireAuthModule, USE_EMULATOR as USE_AUTH_EMULATOR } from "@angular/fire/compat/auth";
 
 
 const firebaseUiAuthConfig: ExtendedFirebaseUIAuthConfig = {
