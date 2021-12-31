@@ -11,7 +11,7 @@ import * as jsonVersion from "./version.json";
 
 declare const global: any;
 
-const FIREBASEUI_CDN_VERSION = jsonVersion.firebaseUiVersion || "4.7.3";
+const FIREBASEUI_CDN_VERSION = jsonVersion.firebaseUiVersion || "6.0.0";
 const FIREBASEUI_CDN_URL = `https://www.gstatic.com/firebasejs/ui/${FIREBASEUI_CDN_VERSION}`;
 
 

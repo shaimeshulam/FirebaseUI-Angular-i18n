@@ -125,11 +125,18 @@ const firebaseUiAuthConfig: ExtendedFirebaseUIAuthConfig = {
 })
 export class AppModule {
 }
-
-
-
-
 ```
+
+You could optionally specify the language id directly in the `firebase-ui` HTML element like in the following snippet:
+```html
+<firebase-ui
+  [language]="'it'"
+  (signInSuccessWithAuthResult)="onFirebaseUiSuccess($event)"
+  (signInFailure)="onFirebaseUiError($event)"></firebase-ui>
+```
+
+For a comprehensive list of supported languages, you can refer to `FirebaseUILanguages` variable exposed by this library.
+
 
 ### Add the firebaseui css to your imports:
 

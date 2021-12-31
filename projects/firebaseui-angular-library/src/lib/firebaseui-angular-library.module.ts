@@ -27,7 +27,7 @@ export class FirebaseUIModule {
     };
   }
 
-  static forFeature(firebaseUIAuthConfig: ExtendedFirebaseUIAuthConfig | any): ModuleWithProviders<FirebaseUIModule> {
+  static forFeature(firebaseUIAuthConfig: ExtendedFirebaseUIAuthConfig): ModuleWithProviders<FirebaseUIModule> {
     return {
       ngModule: FirebaseUIModule,
       providers: [
