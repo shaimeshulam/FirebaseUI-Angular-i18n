@@ -4,6 +4,9 @@
 
 ![Screenshot of Login screen](https://raw.githubusercontent.com/l0ll098/firebaseui-angular-i18n/master/assets/LoginScreen.PNG)
 
+## Demo
+You can try this project out for yourself at [this link](https://fui-angular-i18n.web.app/)
+
 ## Why does this fork exist?
 This is a fork of the original [RaphaelJenni/FirebaseUI-Angular](https://github.com/RaphaelJenni/FirebaseUI-Angular) project.
 This version adds support for internationalization of the FirebaseUI widget in several languages, both LtR and RtL, as shown in the screenshots above.
