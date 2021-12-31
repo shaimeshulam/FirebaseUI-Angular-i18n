@@ -103,11 +103,11 @@ export class DynamicLoaderService {
 
     /**
      * Registers and then loads a list of Resource(s)
-     * @param resource The list of resources
+     * @param resources The list of resources
      */
-    registerAndLoad(...resource: Resource[]) {
-        const resNames = resource.map(s => s.name);
-        this.register(...resource);
+    registerAndLoad(...resources: Resource[]) {
+        const resNames = resources.map(s => s.name);
+        this.register(...resources);
         return this.load(...resNames);
     }
 }
