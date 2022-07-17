@@ -1,10 +1,16 @@
 # Changelog
 
+## 6.1.2
+- Add support for Angular 14 [#179](https://github.com/RaphaelJenni/FirebaseUI-Angular/issues/179)
+
+## 6.1.1
+- Handle new emulator url correctly [#171](https://github.com/RaphaelJenni/FirebaseUI-Angular/pull/171) (Thanks to @Mikael-Eliasson)
+
 Even though this is a fork, it will follow the same version numbers as the original project (as much as possible).
 
 ## __next version__
 Currently not deployed to npm, this is just a placeholder to keep track of potentially breaking changes that will be introduced with the next release.
- - `FirebaseUIModule.forFeature` does no longer accept any input. Now it requires `ExtendedFirebaseUIAuthConfig` object instance (just like the `FirebaseUIModule.forRoot`). 
+ - `FirebaseUIModule.forFeature` does no longer accept any input. Now it requires `ExtendedFirebaseUIAuthConfig` object instance (just like the `FirebaseUIModule.forRoot`).
 
 ## 6.1.0
 - Support for Angular 13

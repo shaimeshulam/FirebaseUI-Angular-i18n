@@ -11,11 +11,11 @@ You can try this project out for yourself at [this link](https://fui-angular-i18
 This is a fork of the original [RaphaelJenni/FirebaseUI-Angular](https://github.com/RaphaelJenni/FirebaseUI-Angular) project.
 This version adds support for internationalization of the FirebaseUI widget in several languages, both LtR and RtL, as shown in the screenshots above.
 The i18n process is handled directly by the FirebaseUI library, except for the fact that it's not. Yeah, I'm not crazy, it's really like that.
-An [issue about this stuff](https://github.com/firebase/firebaseui-web/issues/242) was opened way back in the end of 2017 (in the official FirebaseUI repo). 
+An [issue about this stuff](https://github.com/firebase/firebaseui-web/issues/242) was opened way back in the end of 2017 (in the official FirebaseUI repo).
 Since then almost nothing as changed, so I decided to implement it :)
 
-The [firebaseui](https://www.npmjs.com/package/firebaseui) NPM package ships with only one language: English. 
-That's not the only way of including a library in your project, though. You could also include it from a CDN. 
+The [firebaseui](https://www.npmjs.com/package/firebaseui) NPM package ships with only one language: English.
+That's not the only way of including a library in your project, though. You could also include it from a CDN.
 As it turns out, the official CDN has a localized version of each script we need to show the FirebaseUI widget.
 So, this fork internally does some tricks to dynamically load those localized versions.
 
@@ -31,6 +31,7 @@ Changes included in this fork were discussed [here in the original pull request]
 
 | Angular | Firebase | AngularFire  | FirebaseUI | firebaseui-angular-i18n | Note                       |
 | --------|----------|--------------|------------|-------------------------|---------------------------------|
+| 14.0.2  | ^9.8.3   | ^7.4.1
 | 13.0.0  | ^9.3.0   | ^7.1.1       | ^6.0.0     | 6.1.0                   |                                 |
 | 12.1.0  | ^9.0.2   | ^7.0.4       | ^6.0.0     | 6.0.0                   |                                 |
 | 11.0.2  | ^8.2.4   | ^6.1.1       | ^4.7.2     | 5.1.3                   | *support for i18n*              |
